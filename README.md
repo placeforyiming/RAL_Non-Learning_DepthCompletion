@@ -1,3 +1,3 @@
 # SurfaceGeometry_for_DepthCompletion
 
-More details will be coming soon!
+The codebase is under organization, and more details will be coming soon!
