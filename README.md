@@ -12,5 +12,5 @@ step that is applicable to many robotic systems with both camera and LiDAR senso
 
 **Outlier Removal Examples:**
 <p align="center">
-<img src="/demo/outlier_removal.png" alt="outlier_removal" width="600" height="200">
+<img src="/demo/outlier_removal.png" alt="outlier_removal" width="700" height="300">
 </p>
