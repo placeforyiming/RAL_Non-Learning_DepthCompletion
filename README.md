@@ -23,11 +23,11 @@ step that is applicable to many robotic systems with both camera and LiDAR senso
 
 Download the validation and test dataset from KITTI depth completion benchmark website, then put them under the fodler depth_selection with the stucture:
 
------ depth_selection
-			|
-			-------val_selection_cropped
-			|
-			-------test_depth_completion_anonymous
+----- depth_selection\
+			|\
+			-------val_selection_cropped\
+			|\
+			-------test_depth_completion_anonymous\
 
 
 
@@ -41,19 +41,19 @@ Note: we have two different outlier removal methods. The function ***outlier_rem
 
 Pull the docker image:
 
-***docker pull tensorflow/tensorflow:2.1.0-gpu-py3-jupyter***
+*docker pull tensorflow/tensorflow:2.1.0-gpu-py3-jupyter*
 
 
 Activate the docker container with mounting the code in this repository.
 
 Install packages with the certain version in the docker container:
 
-***bash install_dependency.sh***
+*bash install_dependency.sh*
 
 
 To subsample the 32 line and 16 line LiDAR, please run:
 
-***python subsample_Lidar_val.py***
+*python subsample_Lidar_val.py*
 
 
 After installing all packages, you can open the jupyter note book by **bash jupyter.sh**, and use **depth_completion.ipynb** to explore each step of our method.
