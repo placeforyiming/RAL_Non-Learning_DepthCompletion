@@ -24,13 +24,10 @@ step that is applicable to many robotic systems with both camera and LiDAR senso
 Download the validation and test dataset from KITTI depth completion benchmark website, then put them under the fodler depth_selection with the stucture:
 
 ----- depth_selection\
-&nbsp;|\
-&nbsp;-------val_selection_cropped\
-&nbsp;|\
-&nbsp;-------test_depth_completion_anonymous\
-
-
-
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------val_selection_cropped\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------test_depth_completion_anonymous\
 
 
 
