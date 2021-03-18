@@ -7,4 +7,8 @@ step that is applicable to many robotic systems with both camera and LiDAR senso
 
 **Method Pipeline:**
 
-![alt text](https://github.com/placeforyiming/RAL_Non-Learning_DepthCompletion/tree/main/demo/pipeline.png?raw=true)
+<img src="/demo/pipeline.png" alt="pipeline"/>
+
+**Outlier Removal Examples:**
+
+<img src="/demo/outlier_removal.png" alt="outlier_removal"/>
