@@ -7,7 +7,7 @@ step that is applicable to many robotic systems with both camera and LiDAR senso
 
 **Method Pipeline:**
 
-<img src="/demo/pipeline.png" alt="pipeline" width="800" height="400">
+<img src="/demo/pipeline.png" alt="pipeline" width="800" height="400" style="vertical-align:middle">
 
 
 **Outlier Removal Examples:**
