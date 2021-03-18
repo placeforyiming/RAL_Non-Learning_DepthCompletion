@@ -7,5 +7,4 @@ step that is applicable to many robotic systems with both camera and LiDAR senso
 
 **Method Pipeline:**
 
-
 ![alt text](https://github.com/placeforyiming/RAL_Non-Learning_DepthCompletion/tree/main/demo/pipeline.png?raw=true)
