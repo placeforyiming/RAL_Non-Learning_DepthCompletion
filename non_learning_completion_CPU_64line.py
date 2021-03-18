@@ -2,7 +2,7 @@ from data_read import *
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
-from calculate_normal import *
+from tools import *
 from evaluation import *
 import time
 

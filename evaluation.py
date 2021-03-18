@@ -1,4 +1,3 @@
-import tensorflow as tf
 import math
 import numpy as np
 import unittest
@@ -116,8 +115,8 @@ class Result(object):
         # convert from meters to km
         inv_output_km = (1e-3 * output[valid_mask]) ** (-1)
         inv_target_km = (1e-3 * target[valid_mask]) ** (-1)
-        abs_inv_diff = tf.abs(inv_output_km - inv_target_km)
-        self.irmse = math.sqrt(tf.reduce_mean(tf.math.pow(abs_inv_diff, 2)))
+        abs_inv_diff = np.abs(inv_output_km - inv_target_km)
+        self.irmse = math.sqrt(np.mean(np.power(abs_inv_diff, 2)))
         self.imae = np.mean(abs_inv_diff)
 
         self.photometric = float(photometric)

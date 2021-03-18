@@ -1,10 +1,14 @@
+
+
+
 import os
 from PIL import Image
 import matplotlib.pyplot as plt
 import glob
 import numpy as np
 import random
-import tensorflow as tf
+
+
 def get_paths_and_transform():
     root_d = os.path.join('./depth_selection/KITTI/Sparse_Lidar')
     root_rgb = os.path.join('./depth_selection/KITTI/RGB')
@@ -114,44 +118,6 @@ class Data_load():
         
 
 
-    
-
-def read_batch(batch_size=4):
-    i=0
-    img_batch=[]
-    lidar_batch=[]
-    gt_batch=[]
-    
-    while (i<(batch_size)):
-        i=i+1
-        index = random.randint(0,(total_img-1))
-        #img=rgb_read(img_path[index])
-        depth=depth_read(lidar_path[index])
-        gt_path=img_path_to_ground_truth(img_path[index])
-        ground_truth=depth_read(gt_path)
-        
-        lidar_batch.append(depth)
-        #img_batch.append(img)
-        gt_batch.append(ground_truth)
-    return  np.asarray(lidar_batch),np.asarray(gt_batch)
-
-def read_batch_v2(batch_size=4, index=0):
-    i=0
-    img_batch=[]
-    lidar_batch=[]
-    gt_batch=[]
-    
-    while (i<(batch_size)):
-        i=i+1
-        depth=depth_read(lidar_path[index])
-        gt_path=img_path_to_ground_truth(img_path[index])
-        ground_truth=depth_read(gt_path)
-        
-        lidar_batch.append(depth)
-        gt_batch.append(ground_truth)
-    return  np.asarray(lidar_batch),np.asarray(gt_batch)
-
-    
 
 def read_one_val(index,line_number=64):
     ground_truth_path='./depth_selection/val_selection_cropped/groundtruth_depth'

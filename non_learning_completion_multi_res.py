@@ -2,21 +2,20 @@ from data_read import *
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
-from calculate_normal import *
+from tools import *
 from evaluation import *
 import time
+import tensorflow as tf
 
-def do_range_projection_try(points,proj_H=96,proj_W=2048,fov_up=3.0,fov_down=-18.0):
-    """ Project a pointcloud into a spherical projection image.projection.
-        Function takes no arguments because it can be also called externally
-        if the value of the constructor was not set (in case you change your
-        mind about wanting the projection)
-    """
-    #Now the settings are specilized for KITTI
-    # projected range image - [H,W] range (-1 is no data)
+
+
+
+
+def do_range_projection_try(points,proj_H=64,proj_W=2048,fov_up=3.0,fov_down=-18.0):
+
+
     proj_range = np.full((proj_H, proj_W), -1,dtype=np.float32)
-    if kernel_size==7:
-        kernel=DIAMOND_KERNEL_7 
+
     # unprojected range (list of depths for each point)
     unproj_range = np.zeros((0, 1), dtype=np.float32)
 
@@ -63,79 +62,79 @@ def do_range_projection_try(points,proj_H=96,proj_W=2048,fov_up=3.0,fov_down=-18
     return proj_x,proj_y
 
     
- def outlier_removal_mask(lidar,line_num=64,height_offset=100):
-        
-        height,width=np.shape(np.squeeze(lidar))
+def outlier_removal_mask(lidar,line_num=64,height_offset=100):
 
-        height_bin=np.round((height-height_offset)/line_num-1)
-        width_bin=np.round(width*line_num/(np.sum(lidar>0.1))-1)
+    height,width=np.shape(np.squeeze(lidar))
 
-        
-        total_points,x_indices,y_indices,width_image,height_image=get_all_points(lidar,intrinsic)
-        proj_x,proj_y=do_range_projection_try(total_points)
-
-        project_x=np.zeros((height,width))
-        project_y=np.zeros((height,width))
-        project_x[y_indices,x_indices]=proj_x
-        project_y[y_indices,x_indices]=proj_y
-
-
-        lidar_pre=np.expand_dims(np.squeeze(lidar),axis=0)
-        lidar_pre=np.expand_dims(lidar_pre,axis=-1)
-        lidar_trunck=tf.image.extract_patches(images=lidar_pre,sizes=[1, height_bin*2+1, width_bin*2+1, 1],strides=[1, 1, 1, 1],rates=[1, 1, 1, 1],padding='SAME')
+    height_bin=np.round((height-height_offset)/line_num-1)
+    width_bin=np.round(width*line_num/(np.sum(lidar>0.1))-1)
 
         
-        expand_size=(height_bin*2+1)*(width_bin*2+1)
-        expand_size=np.int32(expand_size)
-        lidar_pre_expand=tf.tile(lidar_pre.astype(np.float32),[1,1,1,expand_size])
+    total_points,x_indices,y_indices,width_image,height_image=get_all_points(lidar,intrinsic)
+    proj_x,proj_y=do_range_projection_try(total_points)
+
+    project_x=np.zeros((height,width))
+    project_y=np.zeros((height,width))
+    project_x[y_indices,x_indices]=proj_x
+    project_y[y_indices,x_indices]=proj_y
+
+
+    lidar_pre=np.expand_dims(np.squeeze(lidar),axis=0)
+    lidar_pre=np.expand_dims(lidar_pre,axis=-1)
+    lidar_trunck=tf.image.extract_patches(images=lidar_pre,sizes=[1, height_bin*2+1, width_bin*2+1, 1],strides=[1, 1, 1, 1],rates=[1, 1, 1, 1],padding='SAME')
+
+    
+    expand_size=(height_bin*2+1)*(width_bin*2+1)
+    expand_size=np.int32(expand_size)
+    lidar_pre_expand=tf.tile(lidar_pre.astype(np.float32),[1,1,1,expand_size])
          
 
-        project_x_pre=np.expand_dims(np.squeeze(project_x),axis=0)
-        project_x_pre=np.expand_dims(project_x_pre,axis=-1)
-        project_x_trunck=tf.image.extract_patches(images=project_x_pre,sizes=[1, height_bin*2+1, width_bin*2+1, 1],strides=[1, 1, 1, 1],rates=[1, 1, 1, 1],padding='SAME')
+    project_x_pre=np.expand_dims(np.squeeze(project_x),axis=0)
+    project_x_pre=np.expand_dims(project_x_pre,axis=-1)
+    project_x_trunck=tf.image.extract_patches(images=project_x_pre,sizes=[1, height_bin*2+1, width_bin*2+1, 1],strides=[1, 1, 1, 1],rates=[1, 1, 1, 1],padding='SAME')
 
-        project_y_pre=np.expand_dims(np.squeeze(project_y),axis=0)
-        project_y_pre=np.expand_dims(project_y_pre,axis=-1)
-        project_y_trunck=tf.image.extract_patches(images=project_y_pre,sizes=[1, height_bin*2+1, width_bin*2+1, 1],strides=[1, 1, 1, 1],rates=[1, 1, 1, 1],padding='SAME')
+    project_y_pre=np.expand_dims(np.squeeze(project_y),axis=0)
+    project_y_pre=np.expand_dims(project_y_pre,axis=-1)
+    project_y_trunck=tf.image.extract_patches(images=project_y_pre,sizes=[1, height_bin*2+1, width_bin*2+1, 1],strides=[1, 1, 1, 1],rates=[1, 1, 1, 1],padding='SAME')
 
-        height_image_pre=np.expand_dims(np.squeeze(height_image).astype(np.double),axis=0)
-        height_image_pre=np.expand_dims(height_image_pre,axis=-1)
-        height_image_trunck=tf.image.extract_patches(images=height_image_pre,sizes=[1, height_bin*2+1, width_bin*2+1, 1],strides=[1, 1, 1, 1],rates=[1, 1, 1, 1],padding='SAME')
+    height_image_pre=np.expand_dims(np.squeeze(height_image).astype(np.double),axis=0)
+    height_image_pre=np.expand_dims(height_image_pre,axis=-1)
+    height_image_trunck=tf.image.extract_patches(images=height_image_pre,sizes=[1, height_bin*2+1, width_bin*2+1, 1],strides=[1, 1, 1, 1],rates=[1, 1, 1, 1],padding='SAME')
 
-        width_image_pre=np.expand_dims(np.squeeze(width_image).astype(np.double),axis=0)
-        width_image_pre=np.expand_dims(width_image_pre,axis=-1)
-        width_image_trunck=tf.image.extract_patches(images=width_image_pre,sizes=[1, height_bin*2+1, width_bin*2+1, 1],strides=[1, 1, 1, 1],rates=[1, 1, 1, 1],padding='SAME')
+    width_image_pre=np.expand_dims(np.squeeze(width_image).astype(np.double),axis=0)
+    width_image_pre=np.expand_dims(width_image_pre,axis=-1)
+    width_image_trunck=tf.image.extract_patches(images=width_image_pre,sizes=[1, height_bin*2+1, width_bin*2+1, 1],strides=[1, 1, 1, 1],rates=[1, 1, 1, 1],padding='SAME')
 
 
-        lidar_residual=lidar_pre-lidar_trunck
+    lidar_residual=lidar_pre-lidar_trunck
         
         
-        project_x_residual=project_x_pre-project_x_trunck
-        project_y_residual=project_y_pre-project_y_trunck
-        height_image_residual=height_image_pre-height_image_trunck
-        width_image_residual=width_image_pre-width_image_trunck
-        zero_mask=np.logical_and(lidar_pre_expand>0.1,lidar_trunck>0.1)
+    project_x_residual=project_x_pre-project_x_trunck
+    project_y_residual=project_y_pre-project_y_trunck
+    height_image_residual=height_image_pre-height_image_trunck
+    width_image_residual=width_image_pre-width_image_trunck
+    zero_mask=np.logical_and(lidar_pre_expand>0.1,lidar_trunck>0.1)
 
-        x_mask_1=np.logical_and(project_x_residual>0.0000,width_image_residual<=0)
-        x_mask_2=np.logical_and(project_x_residual<0.0000,width_image_residual>=0)
-        x_mask=np.logical_or(x_mask_1,x_mask_2)
-        x_mask=np.logical_and(x_mask,zero_mask)
+    x_mask_1=np.logical_and(project_x_residual>0.0000,width_image_residual<=0)
+    x_mask_2=np.logical_and(project_x_residual<0.0000,width_image_residual>=0)
+    x_mask=np.logical_or(x_mask_1,x_mask_2)
+    x_mask=np.logical_and(x_mask,zero_mask)
         
-        y_mask_1=np.logical_and(project_y_residual>0,height_image_residual<=0)
-        y_mask_2=np.logical_and(project_y_residual<0,height_image_residual>=0)
-        y_mask=np.logical_or(y_mask_1,y_mask_2)
-        y_mask=np.logical_and(y_mask,zero_mask)
+    y_mask_1=np.logical_and(project_y_residual>0,height_image_residual<=0)
+    y_mask_2=np.logical_and(project_y_residual<0,height_image_residual>=0)
+    y_mask=np.logical_or(y_mask_1,y_mask_2)
+    y_mask=np.logical_and(y_mask,zero_mask)
         
-        #x_mask=np.logical_and(zero_mask,project_x_residual*width_image_residual<0)
-        #y_mask=np.logical_and(zero_mask,project_y_residual*height_image_residual<0)
+    
         
-        lidar_mask=np.logical_and(lidar_residual>3.0,lidar_pre>0.01)
+    lidar_mask=np.logical_and(lidar_residual>3.0,lidar_pre>0.01)
 
-        final_mask=np.logical_and(lidar_mask,np.logical_or(x_mask,y_mask))    
-        final_mask=np.squeeze(final_mask)
-        final_mask=np.sum(final_mask,axis=-1)
-        final_mask=np.expand_dims(final_mask>0,axis=0)
-        return final_mask
+    final_mask=np.logical_and(lidar_mask,np.logical_or(x_mask,y_mask))    
+    final_mask=np.squeeze(final_mask)
+    final_mask=np.sum(final_mask,axis=-1)
+    final_mask=np.expand_dims(final_mask>0,axis=0)
+    return final_mask
+
 
 
 
@@ -148,6 +147,9 @@ imae_total=0
 A=calculate_normal()
 
 
+# can be 32 or 16
+line_number=64
+
 
 
 kernelx=self_gaussian(kernel_size=7,g_range=2.5)
@@ -156,7 +158,7 @@ threshold=0.1
 for i in range(1000):
 
     print (i)
-    img,lidar,gt,intrinsic= read_one_val(i)
+    img,lidar,gt,intrinsic= read_one_val(i,line_number=64)
 
     # prepare camera parameters
     px,py,fx,fy=construct_px_py_fx_fy(lidar,intrinsic)
@@ -164,8 +166,8 @@ for i in range(1000):
     if i>20:
         time_a=time.time()
 
-
-    lidar_new=outlier_removal(lidar)
+    outpier_mask=outlier_removal_mask(lidar,line_num=64,height_offset=100)
+    lidar_new=(1.0-outpier_mask)*lidar
 
     # get all points
     total_points,x_indices,y_indices,width_image,height_image=get_all_points(lidar_new,intrinsic)
@@ -246,3 +248,5 @@ print (imae_total/1000.0)
 
 print ('method time')
 print (np.sum(time_interval)/len(time_interval))
+
+

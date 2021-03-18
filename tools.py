@@ -7,53 +7,11 @@ def nearest_point(refined_lidar):
     dt,lbl = cv2.distanceTransformWithLabels(value_mask, cv2.DIST_L1, 5, labelType=cv2.DIST_LABEL_PIXEL)
     return dt,lbl
 
-
-def Distance_Transform_Normal(lidar,a,b,c,width_image,height_image):
-    # a,b,c are sparser than lidar
-    lidar=np.squeeze(lidar)
-    height,width=np.shape(lidar)
-    mask_normal=np.logical_and(np.logical_and(a==0,b==0),c==0)
-
-    mask_lidar=lidar>0.001
-    lidar[np.logical_and(mask_normal,mask_lidar)]=0.0
-    mask_lidar=lidar>0.001
-    mask_normal=np.logical_and(np.logical_and(a==0,b==0),c==0)
-    
-    dt,lbl=nearest_point(lidar)
-    with_value=mask_lidar
-    
-    depth_list=np.squeeze(lidar[with_value])
-    height_list=height_image[with_value]
-    width_list=width_image[with_value]
-
-
-    a_list=a[with_value]
-    b_list=b[with_value]
-    c_list=c[with_value]
-    
-    
-    label_list=np.reshape(lbl,[1,height*width])
-    depth_list_all=depth_list[label_list-1]
-    height_list_all= height_list[label_list-1]
-    width_list_all= width_list[label_list-1]
-    a_list_all= a_list[label_list-1]
-    b_list_all= b_list[label_list-1]
-    c_list_all= c_list[label_list-1]
         
-    height_list_all=np.reshape(height_list_all,(height,width))
-    width_list_all=np.reshape(width_list_all,(height,width))
-    a_list_all=np.reshape(a_list_all,(height,width))
-    b_list_all=np.reshape(b_list_all,(height,width))
-    c_list_all=np.reshape(c_list_all,(height,width))
-    depth_map=np.reshape(depth_list_all,(height,width))
-        
-    height_list_offset=height_list_all-height_image
-    width_list_offset=width_list_all-width_image
-    return depth_map,a_list_all,b_list_all,c_list_all,height_list_offset,width_list_offset
 
 
 def Distance_Transform_simple(lidar):
-    # a,b,c are sparser than lidar
+	# only use the nearest neighbor to fill in the depth map
     lidar=np.squeeze(lidar)
     height,width=np.shape(lidar)
     
@@ -73,6 +31,7 @@ def Distance_Transform_simple(lidar):
 
 
 def self_gaussian(kernel_size=7,g_range=3):
+	# self-defined gaussian kernel
 
     DIAMOND_KERNEL_9 = np.asarray(
     [
@@ -87,7 +46,6 @@ def self_gaussian(kernel_size=7,g_range=3):
         [0,0, 0, 0, 1, 0, 0, 0,0],
     ], dtype=np.uint8)
 
-    
 
     DIAMOND_KERNEL_7 = np.asarray(
     [
@@ -113,7 +71,6 @@ def self_gaussian(kernel_size=7,g_range=3):
         kernel=DIAMOND_KERNEL_7 
     if kernel_size==9:
         kernel=DIAMOND_KERNEL_9
-    
     if kernel_size==5:
         kernel=DIAMOND_KERNEL_5 
     x, y = np.meshgrid(np.linspace(-g_range,g_range,kernel_size), np.linspace(-g_range,g_range,kernel_size))
@@ -122,49 +79,10 @@ def self_gaussian(kernel_size=7,g_range=3):
     g = np.exp(-( (d-mu)**2 / ( 2.0 * sigma**2 ) ) )
     result=g*kernel
     return result/np.sum(result)
-def Distance_Transform(lidar,a,b,c,width_image,height_image):
-    # a,b,c are sparser than lidar
-    lidar=np.squeeze(lidar)
-    height,width=np.shape(lidar)
-    mask_normal=np.logical_and(np.logical_and(a==0,b==0),c==0)
-
-    mask_lidar=lidar>0.001
-    c[np.logical_and(mask_normal,mask_lidar)]=1.0
-    mask_normal=np.logical_and(np.logical_and(a==0,b==0),c==0)
-    
-    dt,lbl=nearest_point(lidar)
-    with_value=mask_lidar
-    
-    depth_list=np.squeeze(lidar[with_value])
-    height_list=height_image[with_value]
-    width_list=width_image[with_value]
 
 
-    a_list=a[with_value]
-    b_list=b[with_value]
-    c_list=c[with_value]
-    
-    
-    label_list=np.reshape(lbl,[1,height*width])
-    depth_list_all=depth_list[label_list-1]
-    height_list_all= height_list[label_list-1]
-    width_list_all= width_list[label_list-1]
-    a_list_all= a_list[label_list-1]
-    b_list_all= b_list[label_list-1]
-    c_list_all= c_list[label_list-1]
-        
-    height_list_all=np.reshape(height_list_all,(height,width))
-    width_list_all=np.reshape(width_list_all,(height,width))
-    a_list_all=np.reshape(a_list_all,(height,width))
-    b_list_all=np.reshape(b_list_all,(height,width))
-    c_list_all=np.reshape(c_list_all,(height,width))
-    depth_map=np.reshape(depth_list_all,(height,width))
-        
-    height_list_offset=height_list_all-height_image
-    width_list_offset=width_list_all-width_image
-    return depth_map,a_list_all,b_list_all,c_list_all,height_list_offset,width_list_offset
-        
-    
+
+
 def outlier_removal(lidar):
   # output 2 dimension image
     DIAMOND_KERNEL_7 = np.asarray(
@@ -176,19 +94,6 @@ def outlier_removal(lidar):
         [0, 1, 1, 1, 1, 1, 0],
         [0, 0, 1, 1, 1, 0, 0],
         [0, 0, 0, 1, 0, 0, 0],
-    ], dtype=np.uint8)
-
-    DIAMOND_KERNEL_9 = np.asarray(
-    [
-        [0,0, 0, 0, 1, 0, 0, 0,0],
-        [0,0, 0, 1, 1, 1, 0, 0,0],
-        [0,0, 1, 1, 1, 1, 1, 0,0],
-        [0,1, 1, 1, 1, 1, 1, 1,0],
-        [1,1, 1, 1, 1, 1, 1, 1,1],
-        [0,1, 1, 1, 1, 1, 1, 1,0],
-        [0,0, 1, 1, 1, 1, 1, 0,0],
-        [0,0, 0, 1, 1, 1, 0, 0,0],
-        [0,0, 0, 0, 1, 0, 0, 0,0],
     ], dtype=np.uint8)
 
     
@@ -207,6 +112,8 @@ def outlier_removal(lidar):
     
     return  (sparse_lidar*(1-potential_outliers)).astype(np.float32)
 
+
+
 def construct_px_py_fx_fy(lidar,intrinsic):
     px=intrinsic[0,2]
     py=intrinsic[0,5]
@@ -221,9 +128,10 @@ def construct_px_py_fx_fy(lidar,intrinsic):
     fy_matrix=z_image*fy
     return px_matrix,py_matrix,fx_matrix,fy_matrix
 
+
+
 def get_all_points(lidar,intrinsic):
 
-    
     lidar_32=np.squeeze(lidar).astype(np.float32)
     height,width=np.shape(lidar_32)
     x_axis=[i for i in range(width)]
@@ -263,6 +171,7 @@ def get_all_points(lidar,intrinsic):
 
 
 
+# This implementation is borrowed from RangeNet ++ : https://github.com/PRBonn/rangenet_lib
 def do_range_projection(points,proj_H=96,proj_W=2048,fov_up=3.0,fov_down=-18.0):
     """ Project a pointcloud into a spherical projection image.projection.
         Function takes no arguments because it can be also called externally
@@ -271,6 +180,7 @@ def do_range_projection(points,proj_H=96,proj_W=2048,fov_up=3.0,fov_down=-18.0):
     """
     #Now the settings are specilized for KITTI
     # projected range image - [H,W] range (-1 is no data)
+
     proj_range = np.full((proj_H, proj_W), -1,dtype=np.float32)
 
     # unprojected range (list of depths for each point)
@@ -443,3 +353,50 @@ def put_normal_on_image(normal_spherical,x_indices,y_indices,proj_idx,proj_mask)
     img=np.zeros((352,1216,3))
     img[y_axis,x_axis]=normal_vector
     return img
+
+
+
+
+
+def Distance_Transform(lidar,a,b,c,width_image,height_image):
+    # a,b,c are sparser than lidar
+    lidar=np.squeeze(lidar)
+    height,width=np.shape(lidar)
+    mask_normal=np.logical_and(np.logical_and(a==0,b==0),c==0)
+
+    mask_lidar=lidar>0.001
+    c[np.logical_and(mask_normal,mask_lidar)]=1.0
+    mask_normal=np.logical_and(np.logical_and(a==0,b==0),c==0)
+    
+    dt,lbl=nearest_point(lidar)
+    with_value=mask_lidar
+    
+    depth_list=np.squeeze(lidar[with_value])
+    height_list=height_image[with_value]
+    width_list=width_image[with_value]
+
+
+    a_list=a[with_value]
+    b_list=b[with_value]
+    c_list=c[with_value]
+    
+    
+    label_list=np.reshape(lbl,[1,height*width])
+    depth_list_all=depth_list[label_list-1]
+    height_list_all= height_list[label_list-1]
+    width_list_all= width_list[label_list-1]
+    a_list_all= a_list[label_list-1]
+    b_list_all= b_list[label_list-1]
+    c_list_all= c_list[label_list-1]
+        
+    height_list_all=np.reshape(height_list_all,(height,width))
+    width_list_all=np.reshape(width_list_all,(height,width))
+    a_list_all=np.reshape(a_list_all,(height,width))
+    b_list_all=np.reshape(b_list_all,(height,width))
+    c_list_all=np.reshape(c_list_all,(height,width))
+    depth_map=np.reshape(depth_list_all,(height,width))
+        
+    height_list_offset=height_list_all-height_image
+    width_list_offset=width_list_all-width_image
+    return depth_map,a_list_all,b_list_all,c_list_all,height_list_offset,width_list_offset
+
