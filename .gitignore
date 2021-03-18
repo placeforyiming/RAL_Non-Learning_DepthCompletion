@@ -1,3 +1,2 @@
-*.png
-*.jpg
+output/*
 depth_selection/*/*

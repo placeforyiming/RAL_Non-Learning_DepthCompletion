@@ -6,5 +6,6 @@ LiDAR depth completion is a task that predicts depth values for every pixel on t
 step that is applicable to many robotic systems with both camera and LiDAR sensors.
 
 **Method Pipeline:**
-<embed src="/demo/pipeline.pdf" type="application/pdf">
 
+
+![alt text](https://github.com/placeforyiming/RAL_Non-Learning_DepthCompletion/tree/main/demo/pipeline.png?raw=true)
