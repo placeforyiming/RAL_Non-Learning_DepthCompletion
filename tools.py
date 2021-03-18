@@ -8,6 +8,48 @@ def nearest_point(refined_lidar):
     return dt,lbl
 
         
+def Distance_Transform_Normal(lidar,a,b,c,width_image,height_image):
+    # a,b,c are sparser than lidar
+    lidar=np.squeeze(lidar)
+    height,width=np.shape(lidar)
+    mask_normal=np.logical_and(np.logical_and(a==0,b==0),c==0)
+
+    mask_lidar=lidar>0.001
+    lidar[np.logical_and(mask_normal,mask_lidar)]=0.0
+    mask_lidar=lidar>0.001
+    mask_normal=np.logical_and(np.logical_and(a==0,b==0),c==0)
+    
+    dt,lbl=nearest_point(lidar)
+    with_value=mask_lidar
+    
+    depth_list=np.squeeze(lidar[with_value])
+    height_list=height_image[with_value]
+    width_list=width_image[with_value]
+
+
+    a_list=a[with_value]
+    b_list=b[with_value]
+    c_list=c[with_value]
+    
+    
+    label_list=np.reshape(lbl,[1,height*width])
+    depth_list_all=depth_list[label_list-1]
+    height_list_all= height_list[label_list-1]
+    width_list_all= width_list[label_list-1]
+    a_list_all= a_list[label_list-1]
+    b_list_all= b_list[label_list-1]
+    c_list_all= c_list[label_list-1]
+        
+    height_list_all=np.reshape(height_list_all,(height,width))
+    width_list_all=np.reshape(width_list_all,(height,width))
+    a_list_all=np.reshape(a_list_all,(height,width))
+    b_list_all=np.reshape(b_list_all,(height,width))
+    c_list_all=np.reshape(c_list_all,(height,width))
+    depth_map=np.reshape(depth_list_all,(height,width))
+        
+    height_list_offset=height_list_all-height_image
+    width_list_offset=width_list_all-width_image
+    return depth_map,a_list_all,b_list_all,c_list_all,height_list_offset,width_list_offset
 
 
 def Distance_Transform_simple(lidar):

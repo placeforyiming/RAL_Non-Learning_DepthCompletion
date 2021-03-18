@@ -150,7 +150,8 @@ A=calculate_normal()
 # can be 32 or 16
 line_number=64
 
-
+if not os.path.exists("./output"):
+    os.mkdir("./output")
 
 kernelx=self_gaussian(kernel_size=7,g_range=2.5)
 time_interval=[]
@@ -158,7 +159,7 @@ threshold=0.1
 for i in range(1000):
 
     print (i)
-    img,lidar,gt,intrinsic= read_one_val(i,line_number=64)
+    img,lidar,index,intrinsic= read_one_test(i)
 
     # prepare camera parameters
     px,py,fx,fy=construct_px_py_fx_fy(lidar,intrinsic)
@@ -196,47 +197,16 @@ for i in range(1000):
 
 
     depth_predicted=depth_map+residual*depth_map
-    
+
     
     depth_predicted = cv2.filter2D(depth_predicted, -1, kernelx)
 
     depth_predicted=np.squeeze(lidar_new)+depth_predicted*(1.0-np.squeeze(lidar_new)>0.01)
     depth_predicted[depth_predicted<0.9]=0.9
     depth_predicted[depth_predicted>80.0]=80.0
-    
-
-    if i>20:
-      time_b=time.time()
-      time_interval.append(time_b-time_a)
-    
-    
-    
-    evaluate.evaluate(np.squeeze(depth_predicted),np.squeeze(gt))
-
-    irmse, imae, mse, rmse, mae=evaluate.irmse, evaluate.imae, evaluate.mse, evaluate.rmse, evaluate.mae
-    rmse_total+=rmse
-    mae_total+=mae
-    irmse_total+=irmse
-    imae_total+=imae
-    print ("rmse:")
-    print (rmse_total/(i+1))
-    print ("mae:")
-    print (mae_total/(1+i))
-    print ("irmse:")
-    print (irmse_total/(1+i))
-    print ("imae:")
-    print (imae_total/(1+i))
-
-print ("rmse:")
-print (rmse_total/1000.0)
-print ("mae:")
-print (mae_total/1000.0)      
-print ("irmse:")
-print (irmse_total/1000.0)      
-print ("imae:")
-print (imae_total/1000.0)       
-
-print ('method time')
-print (np.sum(time_interval)/len(time_interval))
-
+        
+    depth_predicted=depth_predicted*256.0
+    depth_predicted=depth_predicted.astype(np.uint16)
+    im=Image.fromarray(depth_predicted)
+    im.save("./output/"+index.split('/')[-1])
 
