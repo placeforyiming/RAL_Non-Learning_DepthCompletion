@@ -27,7 +27,7 @@ Download the validation and test dataset from KITTI depth completion benchmark w
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------val_selection_cropped\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------test_depth_completion_anonymous\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------test_depth_completion_anonymous
 
 
 
