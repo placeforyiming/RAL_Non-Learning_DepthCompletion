@@ -38,20 +38,43 @@ Note: we have two different outlier removal methods. The function ***outlier_rem
 
 Pull the docker image:
 
-*docker pull tensorflow/tensorflow:2.1.0-gpu-py3-jupyter*
+***docker pull tensorflow/tensorflow:2.1.0-gpu-py3-jupyter***
 
 
 Activate the docker container with mounting the code in this repository.
 
 Install packages with the certain version in the docker container:
 
-*bash install_dependency.sh*
+***bash install_dependency.sh***
 
 
 To subsample the 32 line and 16 line LiDAR, please run:
 
-*python subsample_Lidar_val.py*
+***python subsample_Lidar_val.py***
 
 
 After installing all packages, you can open the jupyter note book by **bash jupyter.sh**, and use **depth_completion.ipynb** to explore each step of our method.
+
+
+
+## Run the Code 
+
+
+Run the completion with 64 line LiDAR on KITTI validation (simple outlier removal):
+
+***python non_learning_completion_CPU_64line.py***
+
+Run the completion with 64 line LiDAR on KITTI test (simple outlier removal):
+
+***python non_learning_completion_CPU_64line_test.py***
+
+
+
+Run the completion with 64 line LiDAR on KITTI validation (general outlier removal):
+
+***python non_learning_completion_multi_res.py***
+
+Run the completion with 64 line LiDAR on KITTI test (general outlier removal):
+
+***python non_learning_completion_multi_res_test.py***
 
