@@ -50,7 +50,7 @@ for i in range(1000):
     c=normal_img[:,:,2]
     
 
-    depth_map,a_list_all,b_list_all,c_list_all,height_list_offset,width_list_offset=Distance_Transform(lidar_new,a,b,c,width_image,height_image)
+    depth_map,a_list_all,b_list_all,c_list_all,height_list_offset,width_list_offset=Distance_Transform_Normal(lidar_new,a,b,c,width_image,height_image)
     
     upper=(width_list_offset/fx*a_list_all+height_list_offset/fy*b_list_all)
     lower=(width_image-px)/fx*a_list_all+(height_image-py)/fy*b_list_all+c_list_all
