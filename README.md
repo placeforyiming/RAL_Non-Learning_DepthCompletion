@@ -83,10 +83,16 @@ Run the completion with 64 line LiDAR on KITTI test (general outlier removal):
 
 
 @article{zhao2021surface,
+
   title={A Surface Geometry Model for LiDAR Depth Completion},
+  
   author={Zhao, Yiming and Bai, Lin and Zhang, Ziming and Huang, Xinming},
+  
   journal={IEEE Robotics and Automation Letters},
+  
   year={2021},
+  
   publisher={IEEE}
+  
 }
  
