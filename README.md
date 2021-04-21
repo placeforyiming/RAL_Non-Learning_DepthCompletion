@@ -2,7 +2,7 @@
 
 ## Abstract:
 
-We develop a non-learning depth completion pipeline with the assumption that the empty pixel shares the same surface with the nearest value. The pipeline has two major technical modules: an outlier removal and a surface model to explicitly calculate the depth with a mathematical equation. You can check our paper for more details:
+We develop a non-learning depth completion pipeline with the assumption that the empty pixel shares the same surface with the nearest value. The pipeline has two major technical modules: an outlier removal and a surface model to explicitly calculate the depth with a mathematical equation. Please check our paper for more details:
 
 The arxiv version: https://arxiv.org/pdf/2104.08466.pdf
 
