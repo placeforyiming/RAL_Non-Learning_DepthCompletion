@@ -3,7 +3,9 @@
 ## Abstract:
 
 We develop a non-learning depth completion pipeline with the assumption that the empty pixel shares the same surface with the nearest value. The pipeline has two major technical modules: an outlier removal and a surface model to explicitly calculate the depth with a mathematical equation. You can check our paper for more details:
+
 The arxiv version: https://arxiv.org/pdf/2104.08466.pdf
+
 The IEEE RAL version: https://ieeexplore.ieee.org/abstract/document/9387169?casa_token=m6hbd7riBioAAAAA:bsyIXoghUPIyvK_oASnZAATLqq1h1yt2gAEQbMPLSvdOl0zRsFadmPPuYTPnIEDwlrdW8bM
 
 
@@ -79,3 +81,12 @@ Run the completion with 64 line LiDAR on KITTI test (general outlier removal):
 
 ***python non_learning_completion_multi_res_test.py***
 
+
+@article{zhao2021surface,
+  title={A Surface Geometry Model for LiDAR Depth Completion},
+  author={Zhao, Yiming and Bai, Lin and Zhang, Ziming and Huang, Xinming},
+  journal={IEEE Robotics and Automation Letters},
+  year={2021},
+  publisher={IEEE}
+}
+ 
