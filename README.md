@@ -82,5 +82,20 @@ Run the completion with 64 line LiDAR on KITTI test (general outlier removal):
 ***python non_learning_completion_multi_res_test.py***
 
 
+## Publication ##
+Please cite the papers if you use this code:
 
+```
+@article{zhao2021surface,
+  title={A Surface Geometry Model for LiDAR Depth Completion},
+  author={Zhao, Yiming and Bai, Lin and Zhang, Ziming and Huang, Xinming},
+  journal={IEEE Robotics and Automation Letters},
+  volume={6},
+  number={3},
+  pages={4457--4464},
+  year={2021},
+  publisher={IEEE}
+}
+
+```
  
