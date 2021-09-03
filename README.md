@@ -83,7 +83,7 @@ Run the completion with 64 line LiDAR on KITTI test (general outlier removal):
 
 
 ## Publication ##
-Please cite the papers if you use this code:
+Please cite the paper if you use this code:
 
 ```
 @article{zhao2021surface,
