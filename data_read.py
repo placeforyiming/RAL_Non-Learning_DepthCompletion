@@ -158,13 +158,14 @@ def read_one_val(index,line_number=64):
     # depth[depth_png == 0] = -1.
     depth = np.expand_dims(depth,-1)
 
+    '''
     temp_i=i
     ii=temp_i.replace("image","predicted")
     img_file = Image.open(instance_path+  '/'+ii)
     instance_png = np.array(img_file, dtype=int)
     img_file.close()
     instance_png = np.expand_dims(instance_png,-1)
-    
+    '''
     
     img_file = Image.open(ground_truth_path+  '/'+i[:27]+'groundtruth_depth'+i[32:])
     ground_truth = np.array(img_file, dtype=int)
